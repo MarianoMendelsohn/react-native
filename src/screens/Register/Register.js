@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
-import {Text, View, TextInput, StyleSheet, TouchableOpacity} from 'react-native'
+import {Text, View, TextInput, StyleSheet, TouchableOpacity, ImagePicker} from 'react-native'
 import {auth, db} from '../../firebase/config'
+//import ImagePicker from 'expo-image-picker'
+import {storage} from '../../firebase/config'
+
 
 class Register extends Component {
     constructor(){
@@ -8,11 +11,13 @@ class Register extends Component {
         this.state ={
             usuario: '',
             mail: '',
-            password: ''
+            password: '',
+            miniBio: '',
+            fotoDePerfil: ''
         }
     }
 
-    registrandoUsuario ( usuario, mail, password ){
+    registrandoUsuario ( usuario, mail, password, miniBio ){
         auth.createUserWithEmailAndPassword(mail, password)
         .then(()=>{
             return(
@@ -20,7 +25,6 @@ class Register extends Component {
                     mail: mail,
                     usuario: usuario,
                     miniBio: miniBio,
-                    fotoDePerfil: this.state.imagenURL,
                     createdAt: Date.now()
                 })
             )
@@ -28,6 +32,27 @@ class Register extends Component {
         .then(resp=> this.props.navigation.navigate('Home'))
         .catch(err=> console.log(err))
     }
+
+    // searchImg(){
+    //     ImagePicker.launchImageLibraryAsync()
+    //     .then(resp => {
+    //         fetch(resp.uri)
+    //         .then(data => data.blob())
+    //         .then(img => {
+    //             console.log(storage);
+    //             const ref = storage.ref(`profilePis/${Date.now()}.jpg`)
+    //             ref.put(img)
+    //             .then(()=> {
+    //                 ref.getDownloadURL()
+    //                 .then (url => {
+    //                     this.setState({fotoDePerfil: url})
+    //                 })
+    //             })
+    //         })
+    //         .catch(err => console.log(err))
+    //     })
+    //     .catch( err => console.log( err))
+    // }
 
     render(){
         return(
@@ -63,13 +88,11 @@ class Register extends Component {
                 onChangeText={text => this.setState({miniBio: text})}
                 value={this.state.miniBio}
             />
-             <TextInput
-                style={styles.input}
-                placeholder='Tu foto'
-                keyboardType='default'
-                onChangeText={text => this.setState({imagenURL:text})}
-                value={this.state.fotoDePerfil}
-            />
+            {/* <View>
+                <TouchableOpacity onPress={()=> this.searchImg()}>
+                    <Text style={styles.fotoP}> Carga tu foro de perfil </Text>
+                </TouchableOpacity>
+            </View> */}
             
             <View>
                 <TouchableOpacity onPress={()=> this.registrandoUsuario(this.state.usuario, this.state.mail, this.state.password)}>
@@ -99,6 +122,14 @@ const styles = StyleSheet.create({
     },
     containerRedirect:{
         marginTop: 32
+    },
+    fotoP:{
+        marginTop: 20,
+        padding: 10,
+        width: '80%',
+        height: '50%',
+        borderRadius: '25%',
+
     }
   })
   
