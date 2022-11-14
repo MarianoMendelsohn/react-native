@@ -47,7 +47,7 @@ class Posts extends Component {
               <View>
                 <TextInput
                     keyboardType='default'
-                    onChangeText={text => this.setState({description:text})}
+                    onChangeText={text => this.setState({descripcion:text})}
                     value={this.state.descripcion}
                     style={styles.input}
                     placeholder='Deja tu descripcion'

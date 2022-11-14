@@ -19,6 +19,8 @@ class Register extends Component {
                 db.collection('usuarios').add({
                     mail: mail,
                     usuario: usuario,
+                    miniBio: miniBio,
+                    fotoDePerfil: this.state.imagenURL,
                     createdAt: Date.now()
                 })
             )
@@ -54,6 +56,21 @@ class Register extends Component {
                 value={this.state.password}
                 secureTextEntry={true}
             />
+             <TextInput
+                style={styles.input}
+                placeholder='Acerca de vos'
+                keyboardType='default'
+                onChangeText={text => this.setState({miniBio: text})}
+                value={this.state.miniBio}
+            />
+             <TextInput
+                style={styles.input}
+                placeholder='Tu foto'
+                keyboardType='default'
+                onChangeText={text => this.setState({imagenURL:text})}
+                value={this.state.fotoDePerfil}
+            />
+            
             <View>
                 <TouchableOpacity onPress={()=> this.registrandoUsuario(this.state.usuario, this.state.mail, this.state.password)}>
                     <Text>Registrarse</Text>
