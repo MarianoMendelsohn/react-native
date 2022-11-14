@@ -8,12 +8,12 @@ class Register extends Component {
         this.state ={
             usuario: '',
             mail: '',
-            contraseña: ''
+            password: ''
         }
     }
 
-    registrandoUsuario ( usuario, mail, contraseña ){
-        auth.createUserWithEmailAndPassword(mail, contraseña)
+    registrandoUsuario ( usuario, mail, password ){
+        auth.createUserWithEmailAndPassword(mail, password)
         .then(()=>{
             return(
                 db.collection('usuarios').add({
@@ -23,7 +23,7 @@ class Register extends Component {
                 })
             )
         })
-        .ten(resp=> this.props.navigation.nvigate('Home'))
+        .then(resp=> this.props.navigation.navigate('Home'))
         .catch(err=> console.log(err))
     }
 
@@ -48,14 +48,14 @@ class Register extends Component {
             />
             <TextInput
                 style={styles.input}
-                placeholder='Contraseña'
+                placeholder='password'
                 keyboardType='default'
-                onChangeText={text => this.setState({contraseña: text})}
-                value={this.state.contraseña}
+                onChangeText={text => this.setState({password: text})}
+                value={this.state.password}
                 secureTextEntry={true}
             />
             <View>
-                <TouchableOpacity onPress={()=> this.registrarUsuario(this.state.usuario, this.state.mail, this.state.contraseña)}>
+                <TouchableOpacity onPress={()=> this.registrandoUsuario(this.state.usuario, this.state.mail, this.state.password)}>
                     <Text>Registrarse</Text>
                 </TouchableOpacity>
             </View>

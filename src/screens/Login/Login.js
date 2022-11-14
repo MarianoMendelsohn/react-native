@@ -12,7 +12,6 @@ class LoginScreen extends Component {
     }
 
     componentDidMount(){
-
         auth.onAuthStateChanged(usuario => {
             if ( usuario !== null) {
                 this.props.navigation.navigate('TabNavigation')

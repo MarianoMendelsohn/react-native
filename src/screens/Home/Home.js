@@ -15,7 +15,7 @@ class Home extends Component{
         db.collection('posteos')
         .orderBy('createdAt', 'desc')
         .limit(3)
-        .onSnapshot( doc => {
+        .onSnapshot( docs => {
             let publicaciones = []
             docs.forEach( doc => {
                 publicaciones.push({
