@@ -1,7 +1,5 @@
 import { View, Text, StyleSheet, Image, FlatList,ActivityIndicator,TouchableOpacity} from 'react-native'
 import React, {Component} from 'react'
-import Contador from '../../components/Contador/Contador'
-import {info} from '../../api/data'
 import Post from '../../components/Post/Post'
 import {db} from '../../firebase/config'
 

@@ -36,21 +36,21 @@ class Register extends Component {
                 style={styles.input}
                 placeholder='Nombre de usuario'
                 keyboardType='default'
-                onChangeText={text => this.setState({username: text})}
+                onChangeText={text => this.setState({usuario: text})}
                 value={this.state.usuario}
             />
             <TextInput
                 style={styles.input}
                 placeholder='mail'
                 keyboardType='email-address'
-                onChangeText={text => this.setState({email: text})}
+                onChangeText={text => this.setState({mail: text})}
                 value={this.state.mail}
             />
             <TextInput
                 style={styles.input}
                 placeholder='Contraseña'
                 keyboardType='default'
-                onChangeText={text => this.setState({password: text})}
+                onChangeText={text => this.setState({contraseña: text})}
                 value={this.state.contraseña}
                 secureTextEntry={true}
             />
@@ -60,7 +60,7 @@ class Register extends Component {
                 </TouchableOpacity>
             </View>
             <View>
-                <Text> Crear cuenta </Text>
+                <Text> Inicia sesión </Text>
                 <TouchableOpacity onPress={ () => this.props.navigation.navigate('Login')}>
                     <Text>Loguearse</Text>
                 </TouchableOpacity>
