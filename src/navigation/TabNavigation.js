@@ -1,44 +1,52 @@
-import {View, Text } from 'react-native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import { FontAwesome } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons'; 
-import Home from '../screens/Home/Home'
-import Perfil from '../screens/Perfil/Perfil';
-import Posts from '../screens/Posts/Posts'
-
+import { Ionicons, Entypo, FontAwesome } from '@expo/vector-icons'
+import Profile from '../screens/Profile/Profile'
+import Search from '../screens/Search/Search'
+import NewPosts from '../screens/NewPost/NewPost'
+import HomeNavigation from './HomeNavigation'
 
 const Tab = createBottomTabNavigator()
 
-export default function TabNavigation (){
-    return(
-        <Tab.Navigator>
-            <Tab.Screen 
-            name = 'Home' 
-            component={Home}
-            options={{
-                tabBarIcon: () => <FontAwesome name="home" size={24} color="black" /> // callback que devuelve el componente de fontawseonme 
+export default function TabNavigation() {
+  return (
+    <Tab.Navigator screenOptions={{tabBarShowLabel: false}}>
 
-            }}
-            />
         <Tab.Screen 
-            name = 'Perfil' 
-            component={Perfil}
-            options={{
-                tabBarIcon: () => <FontAwesome name="user" size={24} color="black" /> 
+        name={'HomeNavigation'} 
+        component={HomeNavigation}
+        options={{
+          tabBarIcon: () => <Ionicons name='ios-home' color={'#0095F6'} size={35} />,
+          headerShown:false
+        }}
+        />
 
-            }}
-            />
+       <Tab.Screen 
+        name='Search' 
+        component={Search}
+        options={{
+          tabBarIcon: () => <FontAwesome name="search" size={35} color={'#0095F6'}/>,
+          headerShown:false
+        }} 
+        />
+
+       <Tab.Screen 
+        name='NewPost' 
+        component={NewPosts}
+        options={{
+          tabBarIcon: () => <Entypo name="squared-plus" size={38} color={'#0095F6'}/>,
+          headerShown:false
+        }} 
+        />
+
         <Tab.Screen 
-            name = 'Posts' 
-            component={Posts}
-            options={{
-                tabBarIcon: () => <AntDesign name="plus" size={24} color="black" /> 
-
-            }}
-            />
-        
-
-        </Tab.Navigator>
-    )
+        name='Profile' 
+        component={Profile}
+        options={{
+          tabBarIcon: () => <Ionicons name='ios-person-circle' color={'#0095F6'} size={40} />,
+          headerShown:false
+        }} 
+        />
+    </Tab.Navigator>
+  )
 }
