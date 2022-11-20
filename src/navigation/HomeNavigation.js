@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Home from '../screens/Home/Home'
-import UsersProfile from '../screens/UsersProfile/UsersProfile'
+import UsersProfile from '../screens/usersProfile/usersProfile'
 
 const Stack = createNativeStackNavigator()
 
@@ -18,7 +18,7 @@ class HomeNavigation extends Component {
         />
 
         <Stack.Screen 
-          name='UsersProfile'
+          name='usersProfile'
           component={UsersProfile}
           options={{
             headerShown:false
