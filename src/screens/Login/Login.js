@@ -1,87 +1,116 @@
-import { Text, View, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { Text, View, StyleSheet, TextInput, TouchableOpacity} from 'react-native'
 import React, { Component } from 'react'
-import { auth } from '../../firebase/config'
+import {auth} from '../../firebase/config'
 
-class LoginScreen extends Component {
+
+class Login extends Component {
+
     constructor(props){
         super(props)
-        this.state = {
-            mail: '',
-            contraseña:''
+        this.state={
+            email:'',
+            clave:'',
+            logueado: false,
+            error: ''
         }
     }
 
     componentDidMount(){
-        auth.onAuthStateChanged(usuario => {
-            if ( usuario !== null) {
+        auth.onAuthStateChanged(user => {
+            if(user !== null){
                 this.props.navigation.navigate('TabNavigation')
             }
         })
-
     }
 
-    loguear( mail, contraseña){
-        auth.signInWithEmailAndPassword(mail, contraseña)
-        .then(resp=> {
-            this.props.navigation.navigate('TabNavigation')
-        })
-        .catch( err => console.log('TabNavigation'))
+    loguear(email, clave){
+        auth.signInWithEmailAndPassword(email, clave)
+        .then( resp => this.props.navigation.navigate('TabNavigation'))
+        .catch( err => this.setState({error: "Todavia no tenes cuenta. Resgitrate!!!"}))
     }
 
-    render() {
-        return(
-            <View style={styles.container}>
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Iniciar sesión</Text>
         <View>
+            <TextInput
+             style={styles.input}
+             onChangeText={ text => this.setState( {email: text} )}
+             placeholder='Ingresa tu email'
+             value={this.state.email}
+            />
+            <TextInput
+             style={styles.input}
+             onChangeText={ text => this.setState( {clave: text} )}
+             placeholder='Ingresa tu clave'
+             value={this.state.clave}
+             secureTextEntry={true}
+            />
+            <View>
+                <TouchableOpacity onPress={()=> this.loguear(this.state.email, this.state.clave)}>
+                    <Text style={styles.button}>Entrar</Text>
+                </TouchableOpacity>
+            </View>
 
-          <Text>Login</Text>
-          <TextInput
-              style={styles.input}
-              keyboardType='email-address'
-              placeholder='Ingresa tu email'
-              onChangeText={text => this.setState({mail: text})}
-              value={this.state.mail}
-          />
-          <TextInput
-              style={styles.input}
-              keyboardType='default'
-              placeholder='Ingresa tu Password'
-              onChangeText={text => this.setState({contraseña: text})}
-              value={this.state.contraseña}
-              secureTextEntry={true}
-          />
-          <View>
-              <TouchableOpacity onPress={()=> this.loguear(this.state.mail, this.state.contraseña)}>
-                  <Text>Log In</Text>
-              </TouchableOpacity>
-          </View>
-
-          <View>
-            <Text>
-              ¿Todavía no tenes tu cuenta? ¡Createla!
-            </Text>
-            <TouchableOpacity onPress={()=> this.props.navigation.navigate('Register')}> 
-              <Text>Registrate</Text>
-            </TouchableOpacity>
-          </View>
+            <View>
+                <Text>¿Aún no tienes una cuenta?</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Register') }>
+                    <Text style={styles.register}>Registrate</Text>
+                </TouchableOpacity>
+            </View>
+            {
+                    this.state.error !== '' ?
+                    <Text>{this.state.error}</Text>:
+                    ''
+            }
         </View>
       </View>
-        )
-    }
-
+    )
+  }
 }
 
 const styles = StyleSheet.create({
     container:{
-      flex:1,
-      justifyContent:'center',
-      paddingHorizontal:24
+        flex:1,
+        justifyContent:'center',
+        paddingHorizontal:32
     },
-    input: {
-      height: 40,
-      margin: 12,
-      borderWidth: 1,
-      padding: 10
-    }
-  })
+    
+    title:{
+        textAlign: 'center',
+        fontSize: 25,
+        marginBottom: 15,
+        fontWeight: 'bold',
+        color: '#0095F6',
+    },
+    
+    input:{
+        borderColor: '#ccc',
+        borderWidth: 2,
+        marginBottom: 10,
+        padding: 10,
+        fontSize: 15,
+        borderRadius: 5,
+    },
 
-export default LoginScreen
+    button:{
+        textAlign: 'center',
+        backgroundColor: '#0095F6',
+        padding: 5,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        marginBottom: 5,
+        fontWeight: 'bold',
+        color:'#FFFFFF',
+        fontSize: 17,
+    },
+
+    register:{
+        color: '#0095F6',
+        fontWeight: 'bold'
+    }
+})
+
+export default Login
