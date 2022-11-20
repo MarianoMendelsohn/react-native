@@ -1,7 +1,18 @@
-import MainNavigation from "./src/navigation/MainNavigation"
+import MainNavigation from './src/navigation/MainNavigation';
+import { Component } from 'react';
 
-export default function App(){
-  return(
-    <MainNavigation />
-  )
+export default class App extends Component {
+  
+  constructor(){
+    super()
+    this.state = {
+      initialScreen:'Login'
+    }
+  }
+  
+  render(){
+    return (
+        <MainNavigation initial={this.state.initialScreen} />
+    );
+  }
 }
