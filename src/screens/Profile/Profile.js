@@ -24,7 +24,7 @@ class Profile extends Component {
       })) 
     })
     db.collection('posts')
-    .where('email', '==', auth.currentUser.email)
+    .where('owner', '==', auth.currentUser.email)
     .onSnapshot(docs => {
       let posts = []
       docs.forEach(doc => {

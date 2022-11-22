@@ -140,7 +140,7 @@ class Post extends Component {
                 this.state.miPost ?
                 <TouchableOpacity onPress={()=> this.eliminarPosteo()}>
                     <Text >BORRAR <AntDesign name="delete" size={20} color="black" /></Text>
-                </TouchableOpacity> : ''
+                </TouchableOpacity> : '' 
             }
        
       </View>

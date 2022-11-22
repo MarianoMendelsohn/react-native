@@ -25,7 +25,7 @@ class UsersProfile extends Component {
           })) 
         })
         db.collection('posts')
-        .where('email', '==', this.props.route.params.email)
+        .where('owner', '==', this.props.route.params.email)
         .onSnapshot(docs => {
           let posts = []
           docs.forEach(doc => {
@@ -51,7 +51,7 @@ class UsersProfile extends Component {
         })) 
       })
       db.collection('posts')
-      .where('email', '==', this.props.route.params.email)
+      .where('owner', '==', this.props.route.params.email)
       .onSnapshot(docs => {
         let posts = []
         docs.forEach(doc => {
