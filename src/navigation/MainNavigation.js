@@ -1,12 +1,18 @@
-import {NavigationContainer} from '@react-navigation/native'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
-import React, {Component} from 'react'
-import Login from '../screens/Login/Login'
-import Register from '../screens/Register/Register'
-import Comments from '../screens/Comments/Comments'
-import TabNavigation from './TabNavigation'
+import { StyleSheet, Text, View } from 'react-native';
 
-const Stack = createNativeStackNavigator()
+//componentes que creamos nosotros y los traemos
+import Register from '../screens/Register/Register';
+import Login from '../screens/Login/Login';
+import TabNavigation from './TabNavigation';
+import Comments from '../screens/Comments/Comments';
+//dependencias que instalamos stack navigation y navigation
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Component } from 'react';
+
+
+//Objeto con dos componentes Navigator y Screen
+const Stack = createNativeStackNavigator();
 
 class MainNavigation extends Component {
     constructor(props){
@@ -15,44 +21,51 @@ class MainNavigation extends Component {
             initialScreen:'Login'
         }
     }
+  render(){
+  return (
     
-    render(){  
-        return (
-          <NavigationContainer>
-              <Stack.Navigator
-              initialRouteName={this.state.initialScreen}>
-                    <Stack.Screen 
-                      name='Login' 
-                      component={Login}
-                      options={{
-                          headerShown:false
-                        }}
-                    /> 
-                    
-                    <Stack.Screen
-                      name='Register'
-                      component={Register}
-                      options={{
-                        headerShown:false
-                      }}
-                    />
+    <NavigationContainer>
 
-                    <Stack.Screen 
-                        name='Comments'
-                        component={Comments}
-                    />
+    <Stack.Navigator>
 
-                    <Stack.Screen
-                      name='TabNavigation'
-                      component={TabNavigation}
-                      options={{
-                          headerShown:false
-                        }}
-                    />
-              </Stack.Navigator>
-          </NavigationContainer>
-        )
-    }
-}
+      <Stack.Screen 
+        options={{ headerShown: false }} 
+        name="Register" 
+        component={Register} 
+    
+      />
+
+      <Stack.Screen 
+        options={{ headerShown: false }} 
+        name="Login" 
+        component={Login} 
+      />
+
+      <Stack.Screen 
+        options={{ headerShown: false }} 
+        name="TabNavigation" 
+        component={TabNavigation} 
+      />
+
+      <Stack.Screen 
+        options={{ headerShown: true }} 
+        name="Comments" 
+        component={Comments} 
+      />
+
+    </Stack.Navigator>
+
+  </NavigationContainer>
+  );
+}}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FF9333',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
 export default MainNavigation
