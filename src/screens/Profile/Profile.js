@@ -1,152 +1,139 @@
-import { Text, View, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native'
-import React, { Component } from 'react'
-import {db, auth} from '../../firebase/config'
-import Post from '../../components/Post/Post'
-
+import React, { Component } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, ScrollView,Image } from 'react-native';
+import { auth,db } from '../../firebase/config';
+import Post from "../Post/Post"; 
 class Profile extends Component {
-  
-  constructor(){
-    super()
-    this.state={
-      misDatos: {},
-      id:'',
-      posteos: [],
+	  constructor(props) {
+		super(props);
+		this.state ={
+			users:'',
+			posts:[],
+			bio:'',
+			nombreUsuario:'',
+			image :''
+		}
+		
+	}
+
+    componentDidMount(){
+        db.collection('users').where('email','==',auth.currentUser.email).onSnapshot(
+            docs=>{
+                let users = []
+                docs.forEach(doc=>{
+                users.push({
+                id: doc.id,
+                data: doc.data()
+                });
+		
+
+        this.setState({
+          bio: users[0].data.bio,
+		  nombreUsuario: users[0].data.nombreUsuario,
+		  image: users[0].data.image
+		});
+		  
+
+                })
+            }
+        )
+		db.collection('posts').where('owner','==',auth.currentUser.email).onSnapshot(
+            docs=>{
+                let postsInProfile = [];
+                docs.forEach((doc)=>{
+					postsInProfile.push({
+                id: doc.id,
+                data: doc.data()
+                });
+
+        this.setState({
+            posts: postsInProfile})
+                })
+            }
+		)
+
+
     }
-  }
 
-  componentDidMount(){
-    db.collection('users')
-    .where('email', '==', auth.currentUser.email)
-    .onSnapshot(doc => {
-      doc.forEach(doc => this.setState({
-        id: doc.id,
-        misDatos: doc.data()
-      })) 
-    })
-    db.collection('posts')
-    .where('owner', '==', auth.currentUser.email)
-    .onSnapshot(docs => {
-      let posts = []
-      docs.forEach(doc => {
-          posts.push({
-              id: doc.id,
-              data: doc.data()
-          })
-      })
-      this.setState({
-          posteos: posts
-      })
-  })
-  }
+   
+	logOut() {
+		auth.signOut();
+		this.props.navigation.navigate('Login');
+	}  
+	render() {
+		return (
+			<>
+				<Image 
+                    source={{uri:this.state.image}}
+                    resizeMode="contain"
+                    style={styles.image}
+                />
+				 <Text style={styles.title2}>Email: {auth.currentUser.email} </Text>
+                 <Text style={styles.title2}>Nombre de usuario: {this.state.nombreUsuario} </Text>
+                 <Text style={styles.title2}>Biografía: {this.state.bio}</Text>
+                 <Text style={styles.title2}>Cantidad de posteos:{this.state.posts.length}  </Text>
+                 <ScrollView>
+                <View>
+                    <Text style={styles.title}>POSTEOS</Text>
+                    <FlatList 
+                        data={this.state.posts}
+                        keyExtractor={post => post.id.toString()}
+                        renderItem = { ({item}) => <Post dataPost={item} 
+                        {...this.props} />}
+                    />
+                    
+                </View>
+                </ScrollView>
 
-  cerrarSesion(){
-    auth.signOut()
-    .then( resp => this.props.navigation.navigate('Login'))
-    .catch(err => console.log(err))
-  } 
-  
-  render() {
-    return (
-      <>
-      <View style={styles.containerDatos}>
-        <View style={styles.card}>
-          <Image style={styles.image}
-            source={{uri: this.state.misDatos.foto}} 
-            resizeMode = 'cover'
-          />
-          <View style={styles.usuarioYMail}>
-            <Text style={styles.textCard}>{this.state.misDatos.usuario}</Text>
-            <Text style={styles.textCard}>{this.state.misDatos.email}</Text>
-          </View>
-        </View>      
-        <Text style={styles.text}>Biografia: {this.state.misDatos.biografia}</Text>   
-        <Text style={styles.text}>Cantidad de posts: {this.state.posteos.length}</Text>
-        <TouchableOpacity onPress={()=> this.cerrarSesion()}>
-          <Text style={styles.botton}>Cerrar sesión</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.textPublicaciones}>Publicaciones:</Text>
-        {this.state.posteos.length >= 1 ? 
-        <View style={styles.publicaciones}>
-          <FlatList 
-        data = {this.state.posteos}
-        keyExtractor = {(item) => item.id.toString()}
-        renderItem = {(item) => <Post data={item.item.data} id={item.item.id} />} // preguntar xq item.item (2 veces)
-        />
-        </View>
-        :
-        <Text>Aun no hay publicaciones</Text>
-        }
-      </View>
-      </>
-    )
-  } 
+				<TouchableOpacity onPress={() => this.logOut()}>
+					<Text  style={styles.button2}>Cerrar Sesion</Text>
+				</TouchableOpacity>  
+			</>
+		);
+	}
 }
-
 const styles = StyleSheet.create({
+	image:{
+	/* 	borderBottomLeftRadius:50,
+		borderBottomRightRadius:50,
+		borderTopLeftRadius:50,
+		borderTopRightRadius:50, */
+		height:200
+	},
+	bold:{
+		fontWeight: "bold",
+	},
+	button: {
+        padding:8,
+        backgroundColor:'#FF9333',
+        borderRadius:8,
+        textAlign:'center',
+        marginVertical:8,
+        marginHorizontal:16,
+        width:280
+    },
+	button2: {
+        padding:8,
+        backgroundColor:'grey',
+        borderRadius:8,
+        textAlign:'center',
+        marginVertical:8,
+        marginHorizontal:16,
+        width:280
+    },
+	title:{
+		color: "#000000",
+		textAlign: "center",
+		fontSize: 20,
+		fontWeight: "600",
+		padding: 10,
+    },	
+	title2:{
+		color: "#000000",
+		
+		fontSize: 15,
+		fontWeight: "600",
+		padding: 10,
+    }	
+});
 
-  containerDatos:{
-    flex: 1, 
-    justifyContent: 'center',
-    paddingHorizontal: 32,
-    backgroundColor: '#E0E4EA',
-  },
-
-  publicaciones:{
-    flex: 8, 
-  },
-
-  usuarioYMail:{
-    flexDirection: 'column' 
-  },
-
-  text:{
-    textAlign: 'left',
-    fontSize: 14,
-  },
-
-  textPublicaciones:{
-    textAlign: 'left',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-
-  botton:{
-    textAlign: 'center',
-    backgroundColor: '#0095F6',
-    padding: 5,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 5,
-    fontWeight: 'bold',
-    color:'#FFFFFF',
-    fontSize: 17,
-  },
-
-  image:{
-    height: "80%",
-    width: "25%",
-    borderRadius: "40%",
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
-  card:{
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 2,
-  },
-
-  textCard:{
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: 'black',
-    marginLeft: "5%",
-  }
-
-
-})
-
-
-export default Profile
+export default Profile;

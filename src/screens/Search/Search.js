@@ -1,124 +1,154 @@
-import { Text, View, StyleSheet, TextInput, TouchableOpacity,  FlatList, } from 'react-native'
-import React, { Component } from 'react'
-import { auth, db } from '../../firebase/config'
-import {SearchBar } from 'react-native'
+import React, { Component } from 'react';
+import { ScrollView, StyleSheet, View, TouchableOpacity, TextInput, Text, FlatList} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { db } from '../../firebase/config';
+import { FontAwesome } from '@expo/vector-icons';
 
-class Search extends Component {
-    constructor(props){
-        super(props)
+
+export default class Search extends Component {
+    constructor() {
+        super()
         this.state={
-          data: [],
-          id:'', 
-          resultados: [],
-          users: [], 
-          loading: false,
-          busqueda: '',
+            users: [],
+            resultados: [],
+            filterBy:'',
+            busqueda: false
         }
     }
 
     componentDidMount(){
-        db.collection('users')
-        .onSnapshot(doc => {
-          let resultados = [];
-          doc.forEach(doc => {
-            resultados.push({
-                id: doc.id, 
-                data: doc.data()
-            })
-            
-          })
-          this.setState(
-            {data: resultados}
-          )
-         
-        })
-    }
-
-    buscar(text){
+        db.collection('users').onSnapshot(docs=>{
+            let users = [];
+            //users que es un array vacio le agrego con push toda la info de firebase
+            docs.forEach(doc=>{
+            users.push( {
+                //id del usuario de la coleccion de firebase
+                id:doc.id, 
+                //metodo de firebase que guarda la info de cada usuario
+                data:doc.data()})
     
-        let usersFilter = this.state.data.filter(elm =>
-        {  
-          
-          
-         return elm.data.usuario.toUpperCase().includes(text.toUpperCase())})
-
-         console.log(usersFilter);
-         this.setState({
-           users: usersFilter,
-           user: text,
+        })
+        //igualo el state vacio con el array con los datos de firebase
+            this.setState({
+            users: users,
+           
+            })
         })
     }
+        
+    filter(filtro){
+        console.log(this.state.resultados)
+        if (this.state.filterBy.length !== 0 ) {
+            let resultadosFiltrados = this.state.users.filter((user) => {return user.data.email.toLowerCase().includes(filtro.toLowerCase())})
+            this.setState({resultados: resultadosFiltrados})
+            console.log(resultadosFiltrados)  
+            this.setState({
+                filterBy: '',
+                busqueda: true
+        })   
+        }else{
+            this.setState({resultados:[]})
+        } 
+        
+    }
 
-   render() {
-  
-    return( 
-        <View style={styles.container}>
-            <TextInput style={styles.input}
-              onChangeText={ text => this.setState( {busqueda:text} )}
-              placeholder='¿A quién estas buscando?'
-              value={this.state.busqueda}>
-            </TextInput>
+  render() {
+    return (
+        <ScrollView>
+            <View style={styles.container2}>
+            <TextInput
+                style={styles.campo}
+                keyboardType='default'
+                placeholder='buscar'
+                onChangeText={busqueda=>this.setState({filterBy: busqueda})}
+                value={this.state.filterBy}
+            />
 
-            <TouchableOpacity onPress={()=> this.buscar(this.state.busqueda)}>
-                <Text style={styles.button}> Buscar</Text>
+            <TouchableOpacity
+                style={styles.lupa} 
+                onPress={()=>{this.filter(this.state.filterBy)}}
+            >
+            <Ionicons name="search-sharp" size={24} color="black" />
             </TouchableOpacity>
+            </View>
 
+            {this.state.resultados.length ?
+            <View> 
+            <Text style={styles.text}><strong>Resultados de búsqueda</strong></Text>
             <FlatList
-              data={this.state.users}
-              keyExtractor={(item) => item.id}
-              renderItem= {({item}) => <View>
-                
-                <TouchableOpacity onPress={()=> this.props.navigation.navigate('HomeNavigation', {
-                  screen: 'UsersProfile',
-                  params:{
-                    email: item.data.email
-                  }})}>
-                  <Text style={styles.textUser}>{item.data.usuario}</Text>
-                </TouchableOpacity>  
-                
-                </View>}
-            /> 
-             
-        </View>
+                    data={this.state.resultados}
+                    keyExtractor={item=>item.id.toString()}
+                    ItemSeparatorComponent={()=>(<View style={{height: 1, backgroundColor: '#B7B9BF', width: 300, marginVertical: 5, alignSelf:'center'}}></View>)}
+                    renderItem={({item})=> 
+                    <TouchableOpacity 
+                        onPress={()=>{this.props.navigation.navigate('Mi perfil')}}
+                    >
+                        <div style={styles.listadoUsers}>
+                        <FontAwesome name="user-circle" size={40} color="black" />
+                        <Text style={styles.userName}><strong>{item.data.email}</strong></Text>
+                        </div>
+                    </TouchableOpacity>}
+            >
+            </FlatList>
+            </View> 
+
+            :
+
+            this.state.busqueda &&
+
+            <View>
+                <Text style={styles.leyenda}>No hubo coincidencias con la búsqueda</Text>
+            </View>
+
+            }
+            
+        </ScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-    marginTop: 10,
-    marginRight: 10,
-    marginLeft: 10,
-  },
-
-  input:{
-    borderColor: '#ccc',
-    borderWidth: 2,
-    marginBottom: 5,
-    padding: 10,
-    fontSize: 15,
-    borderRadius: 5,
-  },
-
-  button:{
-    textAlign: 'center',
-    backgroundColor: '#0095F6',
-    padding: 5,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    marginBottom: 5,
-    fontWeight: 'bold',
-    color:'#FFFFFF',
-    fontSize: 17
-  },
-
-  textUser:{
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 5
-  }
+    campo: {
+        fontSize:16,
+        borderColor: '#552586',
+        borderWidth:1,
+        borderStyle:'solid',
+        borderRadius:4,
+        marginVertical:8,
+        marginHorizontal:16,
+        padding:8,
+        width:280
+    },
+    container2: {
+        display: 'flex',
+        flexDirection:'row',
+        justifyContent: 'center',
+        marginHorizontal:6,
+    },
+    lupa: {
+        alignSelf: 'center',
+    },
+    leyenda: {
+        color: 'red',
+        marginLeft: 38
+    },
+    listadoUsers: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        marginLeft: 38,
+        marginTop: 5
+    },
+    text: {
+        fontSize: 20,
+        color: 'black',
+        marginBottom: 10,
+        marginTop: 10,
+        alignSelf: 'center'
+    },
+    userName: {
+        fontSize: 15,
+        paddingLeft: 15,
+        alignSelf: 'center'
+    }
 })
-
-export default Search;
