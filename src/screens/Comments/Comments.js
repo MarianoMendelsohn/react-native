@@ -1,99 +1,144 @@
-import { Text, View, TextInput, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
-import React, { Component } from 'react'
+import React, {Component} from 'react';
+import { db, auth } from '../../firebase/config';
 import firebase from 'firebase'
-import { db, auth } from '../../firebase/config'
-import Comment from '../../components/Comment/Comment'
+import { View, Text, TouchableOpacity, FlatList, TextInput, StyleSheet } from 'react-native';
+import posts from '../Post/Post';
 
 class Comments extends Component {
-  constructor(props){
-    super(props)
-    this.state={
-      comentario: '',
-      comentarios: []
+    constructor(props){
+        super(props);
+        this.state={
+            comments:[],
+            textComment:""
+        }
     }
-  }
+    
+    componentDidMount(){
+        db.collection('posts').doc(this.props.route.params.id).onSnapshot(doc=>{
+                this.setState({
+                    comments: doc.data().comments 
+                })
+        }
+        )
+    }
+    
+    comentario() {
 
-  componentDidMount(){
-    db.collection('posts').doc(this.props.route.params.id).onSnapshot(docs => { // al pasarlo por id recibo un solo posteo
-      this.setState({
-        comentarios: docs.data().comentarios
-      })
-    })
-  }
+		db
+			.collection('posts')
+			.doc(this.props.route.params.id)
+			.update({
+			        comments: firebase.firestore.FieldValue.arrayUnion({
+                    email: auth.currentUser.email,
+                    comentario: this.state.textComment,
+                    createdAt: Date.now()
+                })
+			})
+			.then(() =>
+				this.setState({
+					textComment: "",
+					
+				})
+			)
+			.catch((error) => console.log(error));
+	}
 
-  guardarComentario(){
-    db.collection('posts')
-    .doc(this.props.route.params.id)
-    .update({
-      comentarios: firebase.firestore.FieldValue.arrayUnion({
-        comentario: this.state.comentario,
-        usuario: auth.currentUser.email
-      })
-    })
-    .then()
-    .catch(err => console.log(err))
-  }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Comentarios mas recientes</Text>
+    render(){
+        // console.log(this.state);
+        return(
+                <View>
+                    <Text style={styles.title}>Comment</Text>
+                  <FlatList
+                     data={this.state.comments}
+                     keyExtractor={item => item.createdAt}
+                     renderItem={({item})=>
+                     <View>
+                    <Text>{item.email}</Text> 
+                    <Text>{item.comentario}</Text> 
+                     </View>
+                     }
 
-        <FlatList 
-        data = {this.state.comentarios}
-        keyExtractor = {(item) => item.comentario}
-        renderItem = {({item}) => <Comment data={item}/> }
-        />
+                  >
+                 </FlatList>
 
-        <TextInput style={styles.input}
-          keyboardType='default'
-          placeholder='Agrega un comentario'
-          onChangeText={text => this.setState({comentario: text})}
-          value={this.state.comentario}
-        />
-        <TouchableOpacity onPress={()=> this.guardarComentario()}>
-          <Text style={styles.button}>Publicar</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
+                     <TextInput style={styles.field}
+                     placeholder="text"
+                     keyboardType="default"
+                     onChangeText={(text) => this.setState({textComment : text })}
+                     value={this.state.textComment}/>
+                     <TouchableOpacity style={styles.button}
+                      onPress={()=>{this.comentario(this.state.textComment)}}
+                    ><Text> Agregar comentario</Text></TouchableOpacity>
+                </View>
+
+        )
+    }
 }
 
 const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        marginRight: 10,
-        marginLeft: 10,
+	header: {
+		backgroundColor: "#FF9333",
+		width: "100%",
+		padding: 10,
+		marginBottom: 20,
+	},
+	headertitle: {
+		color: "white",
+		textAlign: "center",
+		fontSize: 20,
+		fontWeight: "600",
+		padding: 10,
+	},
+	container: {
+		overflow: "hidden",
+		flex: 1,
+		flexDirection: "column",
+		alignItems: "center",
+		backgroundColor: "#FFFFFF",
+		color: "#ff9f68",
+		paddingTop: 20,
+	},
+	/* form:{
+		backgroundColor: 'red',
+	}, */
+	field: {
+		width: "50%",
+		backgroundColor: "#E5E5E5",
+		textAlign: "center",
+		padding: 7,
+		marginTop: 5,
+		borderRadius: 15,
+	},
+	title: {
+		color: "#000000",
+		textAlign: "center",
+		fontSize: 20,
+		fontWeight: "600",
+		padding: 10,
+	},
+	bold:{
+		fontWeight: "bold",
+	},
+	button: {
+        padding:8,
+        backgroundColor:'#FF9333',
+        borderRadius:8,
+        textAlign:'center',
+        marginVertical:8,
+        marginHorizontal:16,
+        width:280
     },
-    
-    input:{
-      borderColor: '#ccc',
-      borderWidth: 2,
-      marginBottom: 5,
-      padding: 10,
-      fontSize: 15,   
-      borderRadius: 5,
+	button2: {
+        padding:8,
+        backgroundColor:'grey',
+        borderRadius:8,
+        textAlign:'center',
+        marginVertical:8,
+        marginHorizontal:16,
+        width:280
     },
+		
+});
 
-    button:{
-      textAlign: 'center',
-      backgroundColor: '#0095F6',
-      padding: 5,
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: '#ccc',
-      marginBottom: 10,
-      fontWeight: 'bold',
-      color:'#FFFFFF',
-      fontSize: 17
-  },
-
-  text:{
-    textAlign: 'center',
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginTop: 5
-  }
-})
-
-export default Comments
+export default Comments;

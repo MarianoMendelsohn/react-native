@@ -1,89 +1,107 @@
-import { Text, View, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { Component } from 'react'
-import { db, auth } from '../../firebase/config'
-import Camera from '../../components/Camera/Camera'
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput } from 'react-native'
 
-class NewPosts extends Component {
-  
-    constructor(){
-        super()
-        this.state={
-            descripcion: '',
-            mostrarCamara: true,
-            fotoUrl: ''
-        }
-    }
+import {auth, db} from '../../firebase/config'
+import { Camera } from 'expo-camera'
 
-    guardarPost(text){
-        db.collection('posts').add({
-            email: auth.currentUser.email,
-            createdAt: Date.now(),
-            descripcion: text,
-            likes: [],
-            comentarios: [],
-            foto: this.state.fotoUrl
-        })
-        .then( () => this.props.navigation.navigate('Home'))
-        .catch( err => this.setState({error:err.message}))
-    }
 
-    subirFoto(url){
-        this.setState({
-            fotoUrl: url,
-            mostrarCamara: false
-        })
+import MyCamera from '../../components/MyCamera'
+
+
+export default class NewPost extends Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+      description: '',
+      likes: [],
+      comments: [],
+      showCamera: true,
+      url: ''     
     }
-  
-    render() {
-        return (
+  }
+
+  guardarPost(){
+    console.log("guardar post")
+      db.collection('posts').add({
+        createdAt: Date.now(),
+        owner: auth.currentUser.email,
+        description: this.state.description,
+        likes: [],
+        comments: [],
+        url: this.state.url
+      })
+      .then((res)=>{
+         console.log("Posteo Exitoso")
+         this.setState({
+          description: ""
+         }, () => this.props.navigation.navigate('Home')
+         ) 
+      })
+      .catch( err => console.log(err))
+
+  }
+
+  onImageUpload(url){
+    this.setState({
+      url,
+      showCamera: false
+    })
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+      {
+        this.state.showCamera ? 
+        <MyCamera 
+          onImageUpload = { url => this.onImageUpload(url)}
+        /> :
         <View style={styles.container}>
-            {
-                this.state.mostrarCamara ?
-                <Camera subirFoto={(url)=> this.subirFoto(url)}/> :
-                <>
-                    <TextInput  style={styles.input}
-                        placeholder='Descripción'
-                        onChangeText={text => this.setState({descripcion: text})}
-                        value={this.state.descripcion}
-                        keyboardType='default'
-                    />
-                    <TouchableOpacity onPress={()=> this.guardarPost(this.state.descripcion)}>
-                        <Text style={styles.button}>Compartir</Text>
-                    </TouchableOpacity>
-                </>
-            }
+          <Text style={styles.title}>Nuevo Post</Text>
+          <TextInput 
+            style={styles.field}
+            keyboardType='default'
+            placeholder='Descripcion'
+            onChangeText={text => this.setState({description: text})}
+            multiline
+          />
+          <TouchableOpacity 
+            style= {styles.button}
+            onPress={()=> this.guardarPost()}
+          >
+            <Text style={styles.buttonText}>Guardar Post</Text>
+          </TouchableOpacity>
         </View>
-        )
-    }
+      }
+
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
-        justifyContent: 'center'
+        paddingHorizontal:10,
+        marginTop: 10,
+        height:'100%'
     },
-    
-    input:{
-        borderColor: '#ccc',
-        borderWidth: 2,
-        marginBottom: 5,
-        padding: 10,
-        fontSize: 15,
-        borderRadius: 5,
+    title:{
+        marginBottom:20
     },
-
-    button:{
-        textAlign: 'center',
-        backgroundColor: '#0095F6',
-        padding: 5,
-        borderRadius: 8,
+    field:{
+        borderColor: '#dcdcdc',
         borderWidth: 1,
-        borderColor: '#ccc',
-        marginBottom: 5,
-        fontWeight: 'bold',
-        color:'#FFFFFF',
-        fontSize: 17
+        borderRadius: 2,
+        padding:3,
+        marginBottom:8
     },
+    button: {
+        borderRadius: 2,
+        padding:3,
+        backgroundColor: 'green',
+    },
+    buttonText:{
+        color: '#fff'
+    }
 })
-
-export default NewPosts
