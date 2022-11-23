@@ -1,63 +1,73 @@
-import { FlatList, Image, View, StyleSheet } from 'react-native'
-import React, { Component } from 'react'
-import { db } from '../../firebase/config'
-import Post from '../../components/Post/Post'
+import React, {Component} from 'react';
+import { db, auth } from '../../firebase/config';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, FlatList, Image, ScrollView} from 'react-native';
+import Post from '../Post/Post';
+
 
 class Home extends Component {
-    constructor(){
-        super()
+    constructor(props){
+        super(props);
         this.state={
-            posteos: []
+            posts:[]
         }
     }
-
+    
     componentDidMount(){
-      db.collection('posts').orderBy('createdAt', 'desc').onSnapshot(docs => {
-        let posts = []
-        docs.forEach(doc => {
-          posts.push({
-            id: doc.id,
-            data: doc.data()
-          })
-        })
-        this.setState({
-          posteos: posts
-        })
-      })
+        db.collection('posts').onSnapshot(
+            docs => {
+                let posts = [];
+                docs.forEach( oneDoc => {
+                    posts.push({
+                        id: oneDoc.id,
+                        data: oneDoc.data()
+                    })
+                })
+
+                this.setState({
+                    posts: posts
+                })
+            }
+        )
+
+        
     }
 
-  render() {
-    return (
-      <View style={styles.container} >
-        <Image style={styles.image}
-          source={require('../../../assets/logo.png')}
-          resizeMode = 'contain'
-        />
-        
-        <View style={styles.subcontainer}>
-          <FlatList 
-          data = {this.state.posteos}
-          keyExtractor = {(item) => item.id.toString()}
-          renderItem = {(item) => <Post navigation={this.props.navigation} data={item.item.data} id={item.item.id} />} 
-          />
-        </View>
-      </View>
-    )
-  }
+
+    render(){
+         console.log(this.state.posts)
+        return(
+            <ScrollView>
+                <View>
+                    <Text style={styles.title}>POSTEOS</Text>
+                    <FlatList 
+                        data={this.state.posts}
+                        keyExtractor={post => post.id}
+                        renderItem = { ({item}) => <Post dataPost={item} 
+                        {...this.props} />}
+                    />
+                    
+                </View>
+                </ScrollView>
+        )
+    }
 }
-
 const styles = StyleSheet.create({
-  container:{
-    flex: 1
-  },
-  subcontainer:{
-    flex:5
-  },
-  image:{
-    height: 40,
-    marginTop: 5,
-    marginBottom: 10
-  }
-})
+	header: {
+		backgroundColor: "#FF9333",
+		width: "100%",
+		padding: 10,
+		marginBottom: 20,
+	},
+    title:{
+		color: "#000000",
+		textAlign: "center",
+		fontSize: 20,
+		fontWeight: "600",
+		padding: 10,
+    }
+    
+	
+});
 
-export default Home
+
+export default Home;
