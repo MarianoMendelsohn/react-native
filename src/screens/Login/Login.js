@@ -64,7 +64,7 @@ class Login extends Component {
 
 const styles = StyleSheet.create({
 	header:{
-		backgroundColor: "#FF9333",
+		backgroundColor: "#ff0000",
 		width: "100%",
 		padding: 10,
 		marginBottom: 20,
