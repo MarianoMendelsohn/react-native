@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons,  } from '@expo/vector-icons';
 import Home from '../screens/Home/Home';
 import Profile from '../screens/Profile/Profile';
 import NewPost from '../screens/NewPost/NewPost';
@@ -45,7 +45,10 @@ function TabNavigation() {
             }} 
 			/>
 
-		</Tab.Navigator>
+			
+			
+
+			</Tab.Navigator>
 	);
 }
 const styles = StyleSheet.create({

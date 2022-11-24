@@ -52,7 +52,7 @@ import Post from "../Post/Post";
         return (
             <View style={styles.container}>
                 
-                <Text style={styles.title}>Be Fake.</Text>
+                
 
                 <TouchableOpacity style={styles.button} onPress = {() => this.back()} >
                     <Text style={styles.buttonText}>Volver a Home</Text>
