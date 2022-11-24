@@ -5,10 +5,12 @@ import Register from '../screens/Register/Register';
 import Login from '../screens/Login/Login';
 import TabNavigation from './TabNavigation';
 import Comments from '../screens/Comments/Comments';
+import otherProfile from '../screens/otherProfile/otherProfile'
 //dependencias que instalamos stack navigation y navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Component } from 'react';
+
 
 
 //Objeto con dos componentes Navigator y Screen
@@ -39,6 +41,12 @@ class MainNavigation extends Component {
         options={{ headerShown: false }} 
         name="Login" 
         component={Login} 
+      />
+
+      <Stack.Screen 
+        options={{ headerShown: false }} 
+        name="otherProfile" 
+        component={otherProfile} 
       />
 
       <Stack.Screen 

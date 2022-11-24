@@ -58,7 +58,8 @@ class Post extends Component {
 		return (
 			<View style={styles.separator}>
 				
-				 <Text  onPress={() => this.props.navigation.navigate('Profile')} style={styles.title}><strong>@{this.props.dataPost.data.owner}</strong></Text>
+{this.props.dataPost.data.owner == auth.currentUser.email ?  
+<Text style={styles.nombre} onPress={() => this.props.navigation.navigate('Profile', { id: this.props.id })}> {this.props.dataPost.data.owner}</Text> : <Text style={styles.nombre} onPress={() => this.props.navigation.navigate('otherProfile', { email: this.props.dataPost.data.owner })}> {this.props.dataPost.data.owner}</Text> }
                 <Image 
                     source={{uri:this.props.dataPost.data.url}}
                     resizeMode="contain"
@@ -96,7 +97,8 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		marginBottom: 10,
 		paddingHorizontal: 20,
-		display: "flex"
+		display: "flex",
+		
 		
 	},
     image: {

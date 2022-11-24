@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 	},	
 	headertitle:{
-		color: "white",
+		color: "000000",
 		textAlign: "center",
 		fontSize: 20,
 		fontWeight: "600",
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "column",
 		alignItems: "center",
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#c0c0c0",
 		color: "#ff9f68",
 		paddingTop: 20,
 	},
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     },
 	campo: {
         fontSize:16,
-        borderColor: '#552586',
+        borderColor: '#ff0000',
         borderWidth:1,
         borderStyle:'solid',
         borderRadius:4,
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     },
 	button: {
         padding:8,
-        backgroundColor:'#FF9333',
+        backgroundColor:'#ff0000',
         borderRadius:8,
         textAlign:'center',
         marginVertical:8,

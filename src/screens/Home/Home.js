@@ -41,7 +41,7 @@ class Home extends Component {
                     <Text style={styles.title}>POSTEOS</Text>
                     <FlatList 
                         data={this.state.posts}
-                        keyExtractor={post => post.id}
+                         keyExtractor={post => post.id}
                         renderItem = { ({item}) => <Post dataPost={item} 
                         {...this.props} />}
                     />

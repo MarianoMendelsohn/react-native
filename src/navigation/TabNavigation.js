@@ -6,6 +6,7 @@ import NewPost from '../screens/NewPost/NewPost';
 import Search from '../screens/Search/Search'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+
 const Tab = createBottomTabNavigator();
 
 function TabNavigation() {

@@ -27,7 +27,7 @@ class Register extends Component {
 	componentDidMount() {
 		 auth.onAuthStateChanged((user) => {
 			if (user) {
-				this.props.navigation.navigate('HomeMenu');
+				this.props.navigation.navigate('TabNavigation');
 			}
 		}); 
 	}
@@ -83,7 +83,7 @@ class Register extends Component {
 
 						});
 						//una vez creado el usuario que te lleve al menu
-						/* this.props.navigation.navigate('HomeMenu'); */
+						/* this.props.navigation.navigate('TabNavigation'); */
 					});
 			})
 			.catch((error) => console.log(error));
