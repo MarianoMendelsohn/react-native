@@ -58,6 +58,10 @@ export default class NewPost extends Component {
           onImageUpload = { url => this.onImageUpload(url)}
         /> :
         <View style={styles.container}>
+           <TouchableOpacity 
+            style= {styles.button}
+            onPress={()=> this.nuevoPost()}
+          ></TouchableOpacity>
           <Text style={styles.title}>Nuevo Post</Text>
           <TextInput 
             style={styles.field}
