@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		paddingHorizontal: 20,
 		display: "flex",
+		textAlign: "center",
 		
 		
 	},
