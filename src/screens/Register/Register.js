@@ -191,13 +191,13 @@ class Register extends Component {
 
 const styles = StyleSheet.create({
 	header: {
-		backgroundColor: "#ff0000",
+		backgroundColor: "violet",
 		width: "100%",
 		padding: 10,
 		marginBottom: 20,
 	},
 	headertitle: {
-		color: "#000000",
+		color: "white",
 		textAlign: "center",
 		fontSize: 20,
 		fontWeight: "600",
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "column",
 		alignItems: "center",
-		backgroundColor: "#c0c0c0",
+		backgroundColor: "white",
 		color: "#ff9f68",
 		paddingTop: 20,
 	},
@@ -232,10 +232,11 @@ const styles = StyleSheet.create({
 	},
 	bold:{
 		fontWeight: "bold",
+		color:"white"
 	},
 	button: {
         padding:8,
-        backgroundColor:'#ff0000',
+        backgroundColor:'violet',
         borderRadius:8,
         textAlign:'center',
         marginVertical:8,

@@ -47,21 +47,22 @@ class Home extends Component {
                     />
                     
                 </View>
-                </ScrollView>
+            </ScrollView>
         )
     }
 }
 const styles = StyleSheet.create({
-	header: {
-		backgroundColor: "#ff0000",
-		width: "100%",
-		padding: 10,
-		marginBottom: 20,
-	},
+	// header: {
+	// 	backgroundColor: "#ff0000",
+	// 	width: "100%",
+	// 	padding: 10,
+	// 	marginBottom: 20,
+	// },
     title:{
-		color: "#000000",
+		color: "white",
+        backgroundColor:"violet",
 		textAlign: "center",
-		fontSize: 20,
+		fontSize: 50,
 		fontWeight: "600",
 		padding: 10,
     }

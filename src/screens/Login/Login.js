@@ -64,13 +64,13 @@ class Login extends Component {
 
 const styles = StyleSheet.create({
 	header:{
-		backgroundColor: "#ff0000",
+		backgroundColor: "violet",
 		width: "100%",
 		padding: 10,
 		marginBottom: 20,
 	},	
 	headertitle:{
-		color: "000000",
+		color: "white",
 		textAlign: "center",
 		fontSize: 20,
 		fontWeight: "600",
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "column",
 		alignItems: "center",
-		backgroundColor: "#c0c0c0",
+		backgroundColor: "white",
 		color: "#ff9f68",
 		paddingTop: 20,
 	},

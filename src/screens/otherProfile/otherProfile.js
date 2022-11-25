@@ -92,7 +92,10 @@ import Post from "../Post/Post";
 }
 
 const styles = StyleSheet.create({
-    
+    button:{
+        backgroundColor:"violet",
+        color: "white"
+    }
 })
 
 export default otherProfile;
