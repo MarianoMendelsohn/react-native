@@ -67,10 +67,13 @@ class Profile extends Component {
                     resizeMode="contain"
                     style={styles.image}
                 />
+
+                
 				 <Text style={styles.title2}>Email: {auth.currentUser.email} </Text>
                  <Text style={styles.title2}>Nombre de usuario: {this.state.nombreUsuario} </Text>
                  <Text style={styles.title2}>Biografía: {this.state.bio}</Text>
                  <Text style={styles.title2}>Cantidad de posteos:{this.state.posts.length}  </Text>
+                
                  <ScrollView>
                 <View>
                     <Text style={styles.title}>POSTEOS</Text>
@@ -93,11 +96,13 @@ class Profile extends Component {
 }
 const styles = StyleSheet.create({
 	image:{
-	/* 	borderBottomLeftRadius:50,
-		borderBottomRightRadius:50,
-		borderTopLeftRadius:50,
-		borderTopRightRadius:50, */
-		height:200
+		// borderBottomLeftRadius:50,
+		// borderBottomRightRadius:50,
+		// borderTopLeftRadius:50,
+		// borderTopRightRadius:50, 
+		height:200,
+        backgroundColor: "violet"
+        
 	},
 	bold:{
 		fontWeight: "bold",
@@ -113,7 +118,7 @@ const styles = StyleSheet.create({
     },
 	button2: {
         padding:8,
-        backgroundColor:'grey',
+        backgroundColor:'violet',
         borderRadius:8,
         textAlign:'center',
         marginVertical:8,
@@ -121,19 +126,22 @@ const styles = StyleSheet.create({
         width:280
     },
 	title:{
-		color: "#000000",
+		color: "black",
 		textAlign: "center",
 		fontSize: 20,
 		fontWeight: "600",
 		padding: 10,
+        backgroundColor: ""
     },	
 	title2:{
-		color: "#000000",
-		
+		color: "violet",
+		backgroundColor: "",
 		fontSize: 15,
 		fontWeight: "600",
 		padding: 10,
-    }	
+       
+    },
+    
 });
 
 export default Profile;

@@ -11,12 +11,12 @@ const Tab = createBottomTabNavigator();
 
 function TabNavigation() {
 	return (
-		<Tab.Navigator screenOptions={{tabBarShowLabel: false}}>
+		<Tab.Navigator screenOptions={{tabBarShowLabel: false}} >
 
 			<Tab.Screen style={styles.naranja} 
 				name="Home" 
 				component={Home}  
-				options={{ tabBarIcon: () => <FontAwesome name="home"  size={24} color="#FF9333"/>,
+				options={{ tabBarIcon: () => <FontAwesome name="home"  size={24} color="purple"/>,
                 headerShown: false 
             }} 
 			/>
@@ -24,7 +24,7 @@ function TabNavigation() {
 			<Tab.Screen style={styles.naranja}
 				name="Profile" 
 				component={Profile} 
-				options={{ tabBarIcon: () => <FontAwesome name="user" size={24} color="#FF9333" />,
+				options={{ tabBarIcon: () => <FontAwesome name="user" size={24} color="purple" />,
                 headerShown: false 
             }} 
 			/>
@@ -32,7 +32,7 @@ function TabNavigation() {
             <Tab.Screen style={styles.naranja}
 				name='Search' 
 				component={Search} 
-				options={{tabBarIcon: ({focused}) => <Ionicons name="search-sharp" size={24} color='#FF9333'/>,
+				options={{tabBarIcon: ({focused}) => <Ionicons name="search-sharp" size={24} color='purple'/>,
                 headerShown: false 
             }}
 			/>
@@ -40,7 +40,7 @@ function TabNavigation() {
             <Tab.Screen style={styles.naranja}
 				name="NewPost" 
 				component={NewPost}  
-				options={{ tabBarIcon: () => <FontAwesome name="photo" size={24} color="#FF9333" />,
+				options={{ tabBarIcon: () => <FontAwesome name="photo" size={24} color="purple" />,
                 headerShown: false 
             }} 
 			/>
@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
 	},
 	naranja:{
 		backgroundColor:"#FF9333"
-	}})
+	},
+})
+	
 	
 export default TabNavigation;
